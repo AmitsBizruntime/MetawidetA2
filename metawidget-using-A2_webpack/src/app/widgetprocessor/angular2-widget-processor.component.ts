@@ -13,13 +13,15 @@ import { DynamicComponentService } from '../dynamicservice/dynamic.service';
 @Injectable()
 export class Angular2WidgetProcessor {
 
-    htmlDOM: HTMLElement;
-    dom: Object;
+    MODEL: string = "model";
+    ROOT_COMPONENT_REFERENCE: string = "ref";
+    ACTION: string = "actions";
 
     constructor() { }
 
     processWidget(widget: HTMLElement, elementName: Object, attributes: Object, mw: any) {
-        let modelObject = "ref.model";
+        
+        let modelObject = this.ROOT_COMPONENT_REFERENCE + "." + this.MODEL;
         if (mw.path !== undefined) {
             var splitPath = metawidget.util.splitPath(mw.path);
             let modelName = String(splitPath.names);
@@ -30,20 +32,22 @@ export class Angular2WidgetProcessor {
         }
         let model: string;
         if (elementName !== "entity") {
-            model = metawidget.util.appendPathWithName(modelObject, attributes);
+            model = metawidget.util.appendPathWithName( modelObject, attributes );
         }
 
         let widgetString = widget.outerHTML;
         if (widget.tagName === "INPUT") {
             if (widget.getAttribute("type") === "submit" || widget.getAttribute("type") === "button") {
-                let binding = "ref." + widget.id + "()";
+                let binding = this.ROOT_COMPONENT_REFERENCE + "." + this.ACTION + "." + widget.id + "()";
                 widget.setAttribute("on-click", binding);
             } else {
                 widget.setAttribute("bindon-ngModel", model);
+                widget.setAttribute("on-keyup", "ref.onKeyUp($event)");
+                widget.setAttribute("on-keyup.enter", "ref.onEnter($event)");
             }
         } else if (widget.tagName === "SELECT") {
             widget.setAttribute("bindon-ngModel", model);
-            let binding = "ref." + widget.id + "($event)";
+            let binding = this.ROOT_COMPONENT_REFERENCE + "." + widget.id + "($event)";
             widget.setAttribute("on-change", binding);
         } else if (widget.tagName === "TEXTAREA") {
             widget.setAttribute("bindon-ngModel", model);

@@ -1,17 +1,20 @@
-import { Component, ViewChild, ViewContainerRef, ElementRef, Compiler, OnInit, Renderer } from '@angular/core';
-import '../../public/css/styles.css';
-
+import { Component, ViewChild, QueryList, ViewContainerRef, ElementRef, Compiler, OnInit, Renderer } from '@angular/core';
 import { MetawidgetComponent } from './metawidget/metawidget.component';
+
 declare var metawidget: any;
 
 @Component({
 	selector: 'my-app',
-	templateUrl: './app.component.html'
+	template: require('./app.component.html')
 })
 export class AppComponent implements OnInit {
 
-	@ViewChild(MetawidgetComponent)
-	mw: MetawidgetComponent;
+	/*@ViewChild(MetawidgetComponent)
+	mw: QueryList<MetawidgetComponent>;*/
+	@ViewChild('meta1')
+	mw1: MetawidgetComponent;
+	@ViewChild('meta2')
+	mw2: MetawidgetComponent;
 
 	@ViewChild('metawidget', { read: ViewContainerRef })
 	metawidgetVCRef: ViewContainerRef;
@@ -21,24 +24,37 @@ export class AppComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.mw.rootComponentReference = this;
-	}
-
-	/**
-	 * THIS IS THE FUNCTION DECLARE IN THE MODEL WHICH IS BEING INSPECTED BY METAWIDGET TO SEND THE CLICK EVENT
-	 */
-	onClick() {
-		//Since Scope is not available in Angular2 we are passing "this" (Current Component Reference)
-		alert("Model: " + JSON.stringify(this));
+		//alert(this.mw2);
+		this.mw1.rootComponentReference = this;
+		this.mw2.rootComponentReference = this;
+		//console.log(this.mw.first);
 	}
 
 	designation(event: any) {
 		alert("Change Event: " + event.target.value);
 	}
 
-	save() {
-		//Since Scope is not available in Angular2 we are passing "this" (Current Component Reference)
-		alert("Model: " + JSON.stringify(this.model));
+	onKeyUp(event: any) {
+		console.log( event.target.value );
+	}
+
+	onEnter(event: any) {
+		console.log( "Enter Event Occur: " + event.target.value );
+	}
+
+	actions = {
+		save: function() {
+			alert("Save");
+		},
+		delete: function() {
+			alert("Delete");
+		},
+		edit: function() {
+			alert("Edit");
+		},
+		remove: function() {
+			alert("Remove");
+		}
 	}
 
 	model = {
@@ -57,7 +73,7 @@ export class AppComponent implements OnInit {
 		"type": "object",
 		"properties": {
 			"firstName": {
-				"type": "string"
+				"type": "string",
 			},
 			"lastName": {
 				"type": "string"
@@ -80,10 +96,7 @@ export class AppComponent implements OnInit {
 				"type": "string"
 			},
 			"designation": {
-				enum: ['Software Developer', 'System Admin', 'Full Stack Developer']
-			},
-			"save": {
-				type: "function"
+				"enum": ['Software Developer', 'System Admin', 'Full Stack Developer']
 			}
 		}
 	};

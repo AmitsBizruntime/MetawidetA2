@@ -39,7 +39,7 @@ export class MetawidgetComponent implements OnInit {
         if( this.model === undefined ) {
             this.model = {};
         }
-        metaWidgetConfiguration(this.elem, this.config, this, this.vcRef, this.compiler, this.rootComponentReference);
+        metaWidgetConfiguration(this.elem, this.config, this, this.vcRef, this.compiler, this.rootComponentReference, this.model);
     }
 
     clearWidgets() {
@@ -70,7 +70,7 @@ export class MetawidgetComponent implements OnInit {
 
 }
 
-export function metaWidgetConfiguration(elem: Object, schemaConfiguration: Object, reference: any, vcRef: ViewContainerRef, compiler: Compiler, compRef: any) {
+export function metaWidgetConfiguration(elem: Object, config: Object, reference: any, vcRef: ViewContainerRef, compiler: Compiler, compRef: any, model: any) {
 
     let pipeline = new metawidget.Pipeline(elem);
     pipeline._superLayoutWidget = pipeline.layoutWidget;
@@ -95,8 +95,15 @@ export function metaWidgetConfiguration(elem: Object, schemaConfiguration: Objec
         new Angular2WidgetProcessor()];
     pipeline.layout = new metawidget.layout.HeadingTagLayoutDecorator(
         new metawidget.layout.TableLayout({ numberOfColumns: 1 }));
-    pipeline.configure(schemaConfiguration);
-    reference._pipeline = pipeline;
-    pipeline.buildWidgets(pipeline.inspect(), reference);
+    if( config !== undefined ) {
+        pipeline.configure(config);
+        reference._pipeline = pipeline;
+        pipeline.buildWidgets(pipeline.inspect(), reference);
+    } else {
+        reference._pipeline = pipeline;
+        var splitPath = metawidget.util.splitPath( "model" );
+        let inspectionResult = pipeline.inspect(model, splitPath.type, splitPath.names, reference);
+        pipeline.buildWidgets(inspectionResult, reference);
+    }
     
 }

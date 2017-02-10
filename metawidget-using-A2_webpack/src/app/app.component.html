@@ -1,7 +1,8 @@
 <main>
   <h1>MW-A2 with Webpack</h1>
   <div class="col-md-12">
-     <metawidget [(config)]="config" [(model)]="model" ></metawidget>
+     <metawidget #meta1 [(config)]="config" [(model)]="model" ></metawidget>
+     <metawidget #meta2 [(model)]="actions" ></metawidget>
   </div>
   <div class="col-md-3">
     <pre>{{ model | json }}</pre>
