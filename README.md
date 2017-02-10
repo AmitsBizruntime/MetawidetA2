@@ -23,7 +23,7 @@ NB: Node.js has to be installed to execute the commands.
 This will start with the sample FORM being generated. Usage is explaind below:
 
 	1. "app.component.ts" is the initiated component.
-	2. Selector: "<metawidget [(schemaConfiguration)]="schemaConfiguration" [(model)]="model" ></metawidget>", within the template will call the compiled MetaWidget component.
+	2. Selector: "<metawidget [(config)]="config" [(model)]="model" ></metawidget>", within the template will call the compiled MetaWidget component.
 	3. Overriden widgetProcessor can be found from the package "widgetprocessor", auto-compile of modifications on the .ts file will be reflected.
 	4. pipeline-configuration can be found on the metawidget.component.ts
 	5. Dynamic component.service #TODO {A2-specific}
