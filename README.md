@@ -34,7 +34,7 @@ Usage in different project:
 	2. To test it, create an A2 project with app.component.ts, include the compilable components in app.module.ts
 	
 Note: eg:-
-
+`
 @NgModule({
   imports: [ BrowserModule, FormsModule, HttpModule ],
   declarations: [ 
@@ -44,7 +44,7 @@ Note: eg:-
   providers: [  ],
   bootstrap: [ AppComponent ]
 })
-
+`
 with imports: 
 
 	import { MetawidgetComponent } from './metawidget/metawidget.component';
